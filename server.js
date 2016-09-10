@@ -13,5 +13,6 @@ server.listen(config.port, function () {
 });
 
 io.on('connection', function (socket) {
+   console.log('user is now connected');
    socketController(socket);
 });

@@ -1,0 +1,13 @@
+{
+  "name": "Gatsbill",
+  "version": "0.0.1",
+  "description": "Chat Gatsbill",
+  "main": "server.js",
+  "scripts": {},
+  "author": "Aurélien Boquet",
+  "license": "MIT",
+  "dependencies": {
+    "mongodb": "^2.2.9",
+    "socket.io": "^1.4.8"
+  }
+}

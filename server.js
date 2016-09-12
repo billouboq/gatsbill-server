@@ -8,11 +8,11 @@ const config = require('./config/config');
 const socketController = require('./socket/socket');
 
 // launch server
-server.listen(config.port, function () {
-   console.log('Express server listening on ' + config.port + ' in ' + process.env.NODE_ENV + ' mode');
+server.listen(config.port, () => {
+   console.log(`Server listening on ${config.port} in ${process.env.NODE_ENV} mode`);
 });
 
-io.on('connection', function (socket) {
+io.on('connection', (socket) => {
    console.log('user is now connected');
    socketController(socket);
 });

@@ -5,6 +5,7 @@ const router = express.Router();
 
 // routes
 router.post('/', (req, res) => {
+   console.log(req.body);
    res.send('Birds signup page');
 });
 

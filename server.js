@@ -6,6 +6,7 @@ const express = require('express');
 
 // server js files
 const config = require('./config');
+const setExpressMiddleware = require('./config/middlewares');
 const routeController = require('./route/route');
 const socketController = require('./socket/socket');
 
@@ -13,6 +14,9 @@ const socketController = require('./socket/socket');
 const app = express();
 const server = http.createServer(app);
 const io = require('socket.io')(server);
+
+// express middlewares
+setExpressMiddleware(app);
 
 // express route
 routeController(app);

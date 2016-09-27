@@ -3,7 +3,7 @@
 const config = {
 
    // port of node.js app
-   port: 1234,
+   port: 9876,
 
    // mongo database
    mongo: {

@@ -6,6 +6,7 @@ const express = require('express');
 
 // server js files
 const config = require('./config');
+const mongo = require('./database/mongo');
 const setExpressMiddleware = require('./config/middlewares');
 const routeController = require('./route/route');
 const socketController = require('./socket/socket');
@@ -14,6 +15,9 @@ const socketController = require('./socket/socket');
 const app = express();
 const server = http.createServer(app);
 const io = require('socket.io')(server);
+
+// connection to mongodb
+mongo.connection(config.mongo.getUrl(), ['users']);
 
 // express middlewares
 setExpressMiddleware(app);

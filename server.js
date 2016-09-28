@@ -22,8 +22,13 @@ mongo.connection(config.mongo.getUrl(), ['users']);
 routeController(app);
 
 // socket io
-io.on('connection', (socket) => {
-   console.log('user is now connected');
+io.on('connection', socketioJwt.authorize({
+	secret: config.jwt.secret,
+	timeout: 8000
+}));
+
+io.on('authenticated', (socket) => {
+	console.log('user is now connected');
    socketController(socket);
 });
 

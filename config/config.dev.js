@@ -5,6 +5,10 @@ const config = {
    // port of node.js app
    port: 1234,
 
+   jwt: {
+      secret: 'zh7djHdbd7àHdn2HAmspci41'
+   }
+
    // mongo database
    mongo: {
       user: null,

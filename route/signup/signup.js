@@ -1,14 +1,14 @@
 'use strict';
 
+const jwt = require('jsonwebtoken');
 const express = require('express');
 const router = express.Router();
+const config = require('../../config');
 const db = require('../../database/mongo').collections;
 const keysIn = require('../../helpers/utils').keysIn;
 
 // routes
 router.post('/', (req, res) => {
-
-   console.log(req.body);
 
    if (!keysIn(req.body, ['username', 'email', 'password', 'confirmpassword'])) {
       return res.status(400).json({msg: 'Missing parameters'});
@@ -45,7 +45,9 @@ router.post('/', (req, res) => {
             return res.status(500).end();
          }
 
-         res.json({});
+         const token = jwt.sign(req.body.username, config.jwt.secret);
+
+         res.json({token});
 
       })
 

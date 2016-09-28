@@ -7,7 +7,7 @@ const config = {
 
    jwt: {
       secret: 'zh7djHdbd7àHdn2HAmspci41'
-   }
+   },
 
    // mongo database
    mongo: {

@@ -3,6 +3,7 @@
 // modules
 const http = require('http');
 const express = require('express');
+const socketioJwt = require('socketio-jwt');
 
 // server js files
 const config = require('./config');

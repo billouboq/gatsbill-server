@@ -29,10 +29,12 @@ router.post('/', (req, res) => {
 
       if (user) {
 
+         // username is allready used
          if (user.username === req.body.username) {
             return res.status(400).json({msg: 'Username allready exist'});
          }
 
+         // email is allready used
          if (user.email === req.body.mail) {
             return res.status(400).json({msg: 'Email allready exist'});
          }

@@ -17,7 +17,7 @@ const server = http.createServer(app);
 const io = require('socket.io')(server);
 
 // connection to mongodb
-mongo.connection(config.mongo.getUrl(), ['users']);
+mongo.connection(config.mongo.url(), ['users']);
 
 // express route
 routeController(app);

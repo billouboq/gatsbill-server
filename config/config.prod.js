@@ -9,6 +9,15 @@ const config = {
       secret: 'zh7dn3erDCek9aD587àHdn2H'
    },
 
+   crypto: {
+      password: {
+         saltLength: 32,
+         iterations: 50000,
+         keyLength: 128,
+         digest: 'sha512'
+      }
+   },
+
    // mongo database
    mongo: {
       user: null,
@@ -16,7 +25,7 @@ const config = {
       host: '127.0.0.1',
       port: '27017',
       database: 'gatsbill',
-      getUrl: getMongoUrl
+      url: getMongoUrl
    },
 
 };

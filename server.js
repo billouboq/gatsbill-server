@@ -25,7 +25,7 @@ routeController(app);
 // socket io
 io.on('connection', socketioJwt.authorize({
 	secret: config.jwt.secret,
-	timeout: 8000
+	timeout: 10000
 }));
 
 io.on('authenticated', (socket) => {

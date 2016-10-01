@@ -15,6 +15,10 @@ router.post('/', (req, res) => {
       return res.status(400).json({msg: 'Missing parameters'});
    }
 
+   if (req.body.password !== req.body.confirmpassword) {
+      return res.status(400).json({msg: 'Passwords are not the same'});
+   }
+
    const query = {
       $or: [
          {username: req.body.username},
@@ -43,9 +47,13 @@ router.post('/', (req, res) => {
       }
 
       // create sign password
-      req.body.password = signPassword(req.body.password);
+      const data = {
+         username: req.body.username,
+         email: req.body.email,
+         password: signPassword(req.body.password)
+      };
 
-      db.users.save(req.body, (err) => {
+      db.users.save(data, (err) => {
 
          if (err) {
             return res.status(500).end();

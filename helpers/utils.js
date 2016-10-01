@@ -52,16 +52,20 @@ function signPassword(password) {
  */
 function verifyPassword(password, hash, callback) {
 
-   // get salt used to create password
-   const salt = hash.slice(0, passConfig.saltLength);
+   if (Buffer.isBuffer(hash)) {
 
-   // get old hash
-   const oldHash = hash.toString('binary', passConfig.saltLength);
+         // get salt used to create password
+         const salt = hash.slice(0, passConfig.saltLength);
 
-   // get new hash
-   const newHash = crypto.pbkdf2Sync(password, salt, passConfig.iterations, passConfig.keyLength, passConfig.digest);
+         // get old hash
+         const oldHash = hash.toString('binary', passConfig.saltLength);
 
-   // compare the two hashes and return the result
-   return newHash.toString('binary', passConfig.saltLength) === oldHash;
+         // get new hash
+         const newHash = crypto.pbkdf2Sync(password, salt, passConfig.iterations, passConfig.keyLength, passConfig.digest);
+
+         // compare the two hashes and return the result
+         return newHash.toString('binary', passConfig.saltLength) === oldHash;
+
+   }
 
 }

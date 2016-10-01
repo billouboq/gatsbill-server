@@ -6,6 +6,7 @@ const router = express.Router();
 const config = require('../../config');
 const db = require('../../database/mongo').collections;
 const keysIn = require('../../helpers/utils').keysIn;
+const signPassword = require('../../helpers/utils').signPassword;
 
 // routes
 router.post('/', (req, res) => {
@@ -40,6 +41,9 @@ router.post('/', (req, res) => {
          }
 
       }
+
+      // create sign password
+      req.body.password = signPassword(req.body.password);
 
       db.users.save(req.body, (err) => {
 

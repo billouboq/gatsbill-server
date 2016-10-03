@@ -32,10 +32,7 @@ io.on('connection', socketioJwt.authorize({
 	timeout: 10000
 }));
 
-io.on('authenticated', (socket) => {
-	console.log('user is now connected');
-   socketController(socket);
-});
+io.on('authenticated', socketController);
 
 // launch server
 server.listen(config.port, () => {

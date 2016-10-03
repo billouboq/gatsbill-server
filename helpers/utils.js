@@ -50,7 +50,7 @@ function signPassword(password) {
  * @param  {Buffer} hash       The buffer containing a signed password
  * @return {Boolean}           True of password are the same otherwise False
  */
-function verifyPassword(password, hash, callback) {
+function verifyPassword(password, hash) {
 
    if (Buffer.isBuffer(hash)) {
 

@@ -8,6 +8,7 @@ const socketioJwt = require('socketio-jwt');
 // server js files
 const config = require('./config');
 const mongo = require('./database/mongo');
+const expressMiddlewares = require('./middlewares');
 const routeController = require('./route/route');
 const socketController = require('./socket/socket');
 
@@ -18,6 +19,9 @@ const io = require('socket.io')(server);
 
 // connection to mongodb
 mongo.connection(config.mongo.getUrl(), ['users']);
+
+// express middleware
+expressMiddlewares(app);
 
 // express route
 routeController(app);

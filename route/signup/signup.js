@@ -53,13 +53,13 @@ router.post('/', (req, res) => {
          password: signPassword(req.body.password)
       };
 
-      db.users.save(data, (err) => {
+      db.users.insertOne(data, (err, result) => {
 
          if (err) {
             return res.status(500).end();
          }
 
-         const token = jwt.sign(req.body.username, config.jwt.secret);
+         const token = jwt.sign(result.insertedId.toString(), config.jwt.secret);
 
          res.json({token});
 

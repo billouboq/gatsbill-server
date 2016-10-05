@@ -26,13 +26,22 @@ expressMiddlewares(app);
 // express route
 routeController(app);
 
-// socket io
+// socket io jwt middleware
 io.on('connection', socketioJwt.authorize({
 	secret: config.jwt.secret,
-	timeout: 10000
+	timeout: 15000
 }));
 
-io.on('authenticated', socketController);
+// when user is authenticated
+io.on('authenticated', (socket) => {
+
+	// now socket id is the user _id
+	socket.id = socket.decoded_token;
+
+	// start socket route listeners
+	socketController(socket);
+
+});
 
 // launch server
 server.listen(config.port, () => {

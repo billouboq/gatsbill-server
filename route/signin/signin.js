@@ -31,9 +31,12 @@ router.post('/', (req, res) => {
          return res.status(400).json({msg: 'Incorrect password'});
       }
 
-      const token = jwt.sign(user._id.toString(), config.jwt.secret);
+      const token = jwt.sign({
+         _id: user._id.toString(),
+         username: user.username
+      }, config.jwt.secret);
 
-      res.json({token});
+      res.json({token, user});
 
    });
 

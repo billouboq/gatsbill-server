@@ -12,8 +12,16 @@ module.exports = (socket) => {
    }
 
    db.users.find(query).toArray((err, users) => {
+
       console.log(err);
       console.log(users);
+
+      if (err) {
+         return socket.emit('removeFriend', {status: 500});
+      }
+
+      // socket.emit('removeFriend', {status: 200, body: users});
+
    });
 
 };

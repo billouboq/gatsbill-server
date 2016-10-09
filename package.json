@@ -7,14 +7,15 @@
   "author": "Aurélien Boquet",
   "license": "MIT",
   "dependencies": {
+    "bluebird": "^3.4.6",
     "body-parser": "^1.15.2",
     "compression": "^1.6.2",
     "express": "^4.14.0",
+    "helmet": "^2.3.0",
     "jsonwebtoken": "^7.1.9",
     "mongodb": "^2.2.10",
     "socket.io": "^1.4.8",
-    "socketio-jwt": "^4.5.0",
-    "helmet": "^2.3.0"
+    "socketio-jwt": "^4.5.0"
   },
   "devDependencies": {
     "morgan": "^1.7.0"

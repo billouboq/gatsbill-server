@@ -5,22 +5,23 @@ const ObjectID = require('mongodb').ObjectID;
 
 module.exports = (socket) => {
 
-   console.log('get friends');
-
    const query = {
       _id: ObjectID(socket.id)
    }
 
-   db.users.find(query).toArray((err, users) => {
+   const options = {
+      fields: {
+         friends: 1
+      }
+   }
 
-      console.log(err);
-      console.log(users);
+   db.users.findOne(query, options, (err, user) => {
 
       if (err) {
-         return socket.emit('removeFriend', {status: 500});
+         return socket.emit('getFriends', {status: 500});
       }
 
-      // socket.emit('removeFriend', {status: 200, body: users});
+      socket.emit('getFriends', {status: 200, body: user.friends});
 
    });
 

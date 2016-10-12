@@ -18,13 +18,16 @@ const server = http.createServer(app);
 const io = require('socket.io')(server);
 
 // connection to mongodb
-mongo.connection(config.mongo.getUrl(), ['users']);
+mongo.connection(config.mongo.getUrl(), ['users', 'messages', 'friends']);
 
 // express middleware
 expressMiddlewares(app);
 
 // express route
 routeController(app);
+
+// io options
+io.set('transports', ['websocket']);
 
 // socket io jwt middleware
 io.on('connection', socketioJwt.authorize({

@@ -5,46 +5,33 @@ const ObjectID = require('mongodb').ObjectID;
 
 module.exports = (socket, data) => {
 
-   let query = {
-      username: data
-   };
+   const myId = ObjectID(socket.id);
+   const userId = ObjectID(data);
 
-   let update = {
-      $pull: {
-         friends: {
-            username: socket.username
-         }
-      }
+   const removeQueryUser = {
+      $and: [
+         {ownerid: userId},
+         {userid: myId}
+      ]
    }
 
-   db.users.findOneAndUpdate(query, update, (err, result) => {
+   const removeQueryOwn = {
+      $and: [
+         {ownerid: myId},
+         {userid: userId}
+      ]
+   }
 
-      if (err) {
-         return socket.emit('removeFriend', {status: 500});
-      }
+   const removeUser = db.friends.deleteOne(removeQueryUser);
+   const removeOwn = db.friends.deleteOne(removeQueryOwn);
 
-      query = {
-         _id: ObjectID(socket.id)
-      };
-
-      update = {
-         $pull: {
-            friends: {
-               username: data
-            }
-         }
-      }
-
-      db.users.updateOne(query, update, (err, result) => {
-
-         if (err) {
-            return socket.emit('removeFriend', {status: 500});
-         }
-
-         socket.emit('removeFriend', {status: 200, body: data});
-
-      });
-
-   });
+   Promise.all([
+      removeUser,
+      removeOwn
+   ]).then((res) => {
+      socket.emit('removeFriend', {status: 200, body: data});
+   }).catch((err) => {
+      socket.emit('removeFriend', {status: 500});
+   })
 
 };

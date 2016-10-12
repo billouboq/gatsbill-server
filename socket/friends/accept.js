@@ -5,48 +5,57 @@ const ObjectID = require('mongodb').ObjectID;
 
 module.exports = (socket, data) => {
 
-   let query = {
+   const myId = ObjectID(socket.id);
+   const userId = ObjectID(data);
+
+   const query = {
       $and: [
-         {username: data},
-         {'friends.username': socket.username}
+         {ownerid: myId},
+         {userid: userId}
       ]
    }
 
-   let update = {
-      $set: {
-         'friends.$.status': 'accepted'
-      }
-   }
-
-   db.users.findOneAndUpdate(query, update, (err, result) => {
+   db.friends.findOne(query, (err, friend) => {
 
       if (err) {
          return socket.emit('acceptFriend', {status: 500});
       }
 
-      query = {
+      if (!friend) {
+         return socket.emit('acceptFriend', {status: 400});
+      }
+
+      const updateQueryUser = {
          $and: [
-            {_id: ObjectID(socket.id)},
-            {'friends.username': data}
+            {ownerid: userId},
+            {userid: myId}
          ]
-
       }
 
-      update = {
+      const updateQueryOwn = {
+         $and: [
+            {ownerid: myId},
+            {userid: userId}
+         ]
+      }
+
+      const update = {
          $set: {
-            'friends.$.status': 'accepted'
+            status: 'accepted'
          }
       }
 
-      db.users.updateOne(query, update, (err, result) => {
+      const updateUser = db.friends.updateOne(updateQueryUser, update);
+      const updateOwn = db.friends.updateOne(updateQueryOwn, update);
 
-         if (err) {
-            return socket.emit('acceptFriend', {status: 500});
-         }
-
+      Promise.all([
+         updateUser,
+         updateOwn
+      ]).then((res) => {
          socket.emit('acceptFriend', {status: 200, body: data});
-
-      });
+      }).catch((err) => {
+         socket.emit('acceptFriend', {status: 500});
+      })
 
    });
 

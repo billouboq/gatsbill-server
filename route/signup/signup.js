@@ -50,8 +50,7 @@ router.post('/', (req, res) => {
       const data = {
          username: req.body.username,
          email: req.body.email,
-         password: signPassword(req.body.password),
-         friends: []
+         password: signPassword(req.body.password)
       };
 
       db.users.insertOne(data, (err, result) => {

@@ -6,22 +6,16 @@ const ObjectID = require('mongodb').ObjectID;
 module.exports = (socket) => {
 
    const query = {
-      _id: ObjectID(socket.id)
+      ownerid: ObjectID(socket.id)
    }
 
-   const options = {
-      fields: {
-         friends: 1
-      }
-   }
-
-   db.users.findOne(query, options, (err, user) => {
+   db.friends.find(query).toArray((err, friends) => {
 
       if (err) {
          return socket.emit('getFriends', {status: 500});
       }
 
-      socket.emit('getFriends', {status: 200, body: user.friends});
+      socket.emit('getFriends', {status: 200, body: friends});
 
    });
 

@@ -9,57 +9,66 @@ module.exports = (socket, data) => {
    const date = new Date();
 
    let query = {
-      $and: [
-         {username: data},
-         {_id: {$ne: myId}},
-         {'friends.username': {$ne: socket.username}}
-      ]
+      username: data
    }
 
-   let update = {
-      $push: {
-         friends: {
-            username: socket.username,
-            date: date,
-            status: 'pending'
-         }
-      }
-   }
-
-   db.users.findOneAndUpdate(query, update, (err, result) => {
+   db.users.findOne(query, (err, user) => {
 
       if (err) {
          return socket.emit('askFriend', {status: 500});
       }
 
-      if (!result.value) {
+      if (!user) {
          return socket.emit('askFriend', {status: 400});
       }
 
       query = {
-         _id: myId
+         $and: [
+            {username: data},
+            {ownerid: myId}
+         ]
       }
 
-      update = {
-         $push: {
-            friends: {
-               username: result.value.username,
-               date: date,
-               status: 'ask'
-            }
-         }
-      }
-
-      db.users.updateOne(query, update, (err, result) => {
+      db.friends.count(query, (err, count) => {
 
          if (err) {
             return socket.emit('askFriend', {status: 500});
          }
 
-         socket.emit('askFriend', {status: 200, body: data});
+         if (count) {
+            return socket.emit('askFriend', {status: 400});
+         }
+
+         const userFriend = {
+            userid: myId,
+            username: socket.username,
+            date: date,
+            status: 'ask',
+            ownerid: user._id
+         }
+
+         const ownFriend = {
+            userid: user._id,
+            username: user.username,
+            date: date,
+            status: 'pending',
+            ownerid: myId
+         }
+
+         const updateUser = db.friends.insertOne(userFriend);
+         const updateMe = db.friends.insertOne(ownFriend);
+
+         Promise.all([
+            updateUser,
+            updateMe
+         ]).then((res) => {
+            socket.emit('askFriend', {status: 200, body: ownFriend})
+         }).catch((err) => {
+            socket.emit('askFriend', {status: 500})
+         });
 
       });
 
-   });
+   })
 
-};
+}

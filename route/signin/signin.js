@@ -31,6 +31,8 @@ router.post('/', (req, res) => {
          return res.status(400).json({msg: 'Incorrect password'});
       }
 
+      delete user.password;
+
       const token = jwt.sign({
          _id: user._id.toString(),
          username: user.username

@@ -38,8 +38,6 @@ io.on('connection', socketioJwt.authorize({
 // when user is authenticated
 io.on('authenticated', (socket) => {
 
-	console.log('authenticated')
-
 	// now socket id is the user _id
 	socket.id = socket.decoded_token._id;
 	socket.username = socket.decoded_token.username;

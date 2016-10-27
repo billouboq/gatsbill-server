@@ -1,6 +1,6 @@
 'use strict';
 
-const onMessage = require('./message/message');
+const onSendMessage = require('./message/send');
 const onAskFriend = require('./friends/ask');
 const onAcceptFriend = require('./friends/accept');
 const onRemoveFriend = require('./friends/remove');
@@ -9,7 +9,7 @@ const onGetFriends = require('./friends/get');
 module.exports = (socket) => {
 
    // message
-   listenTo(socket, 'message', onMessage);
+   listenTo(socket, 'sendMessage', onSendMessage);
 
    // friends
    listenTo(socket, 'getFriends', onGetFriends);

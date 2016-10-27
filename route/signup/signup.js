@@ -50,7 +50,8 @@ router.post('/', (req, res) => {
       const data = {
          username: req.body.username,
          email: req.body.email,
-         password: signPassword(req.body.password)
+         password: signPassword(req.body.password),
+         friends: []
       };
 
       db.users.insertOne(data, (err, result) => {
@@ -59,12 +60,15 @@ router.post('/', (req, res) => {
             return res.status(500).end();
          }
 
+         const user = result.ops[0];
+         delete user.password;
+
          const token = jwt.sign({
             _id: result.insertedId.toString(),
             username: req.body.username
          }, config.jwt.secret);
 
-         res.json({token});
+         res.json({token, user});
 
       })
 
